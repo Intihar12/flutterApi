@@ -1,9 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dimens.dart';
 import 'my_colors.dart';
 import 'my_fonts.dart';
+
+
+
 
 class Styles {
   static final appTheme = _baseTheme.copyWith(
@@ -12,7 +15,6 @@ class Styles {
       size: Dimens.size20,
     ),
     textTheme: _baseTextTheme,
-    accentTextTheme: _accentTextTheme,
     cardTheme: _baseTheme.cardTheme.copyWith(
       margin: EdgeInsets.zero,
     ),
@@ -20,25 +22,31 @@ class Styles {
       cursorColor: _colorScheme.secondary,
       selectionHandleColor: _colorScheme.secondary,
     ),
+
+
+
     appBarTheme: AppBarTheme(
-        backgroundColor: MyColors.white,
-        titleTextStyle: TextStyle(
-            fontSize: 16,
-            fontFamily: MyFonts.typos,
-            fontWeight: FontWeight.w600,
-            color: MyColors.black)),
+        // systemOverlayStyle: SystemUiOverlayStyle(
+        //     statusBarColor: MyColors.primaryColor,
+        //     statusBarIconBrightness: Brightness.dark,
+        //     statusBarBrightness: Brightness.light
+        // ),
+        backgroundColor: _colorScheme.primary,
+    titleTextStyle: const TextStyle( fontSize: 20, fontWeight: FontWeight.bold)),
     scrollbarTheme: ScrollbarThemeData(
         isAlwaysShown: true,
         showTrackOnHover: true,
         interactive: true,
-        trackColor:
-            MaterialStateProperty.all(MyColors.greyFont.withOpacity(0.3)),
-        trackVisibility: MaterialStateProperty.all(true),
+
+        trackColor: MaterialStateProperty.all(MyColors.green100 ),
+        trackBorderColor: MaterialStateProperty.all(MyColors.yellow),
         thickness: MaterialStateProperty.all(5),
-        thumbColor: MaterialStateProperty.all(MyColors.primaryColor),
-        radius: Radius.circular(10),
-        minThumbLength: 60),
+        thumbColor: MaterialStateProperty.all(MyColors.darkBlue),
+        radius: const Radius.circular(10),
+        minThumbLength: 10),
   );
+
+
 
   static final secondaryTextTheme = _baseTextTheme.apply(
     displayColor: MyColors.white,
@@ -52,103 +60,98 @@ class Styles {
 
   static const _colorScheme = ColorScheme.light(
     primary: MyColors.primaryColor,
-    secondary: MyColors.secondaryColor,
+    secondary: MyColors.black,
     onPrimary: MyColors.white,
     onSecondary: MyColors.parpal,
     onBackground: MyColors.appBackground,
+
   );
 
   static final _baseTheme = ThemeData.from(
     colorScheme: _colorScheme,
-    textTheme: Typography.material2018().black.apply(
-          fontFamily: MyFonts.typos,
-          displayColor: _colorScheme.secondary,
-          bodyColor: _colorScheme.secondary,
-        ),
+    textTheme: Typography
+        .material2018()
+        .black
+        .apply(
+      fontFamily: MyFonts.roboto,
+      displayColor: _colorScheme.secondary,
+      bodyColor: _colorScheme.secondary,
+    ),
   );
 
   static final _baseTextTheme = _baseTheme.textTheme.copyWith(
     headline1: _baseTheme.textTheme.headline1!.copyWith(
       color: MyColors.black,
-      fontSize: 24,
+      fontSize: 22.0,
       height: 1.5,
-      fontWeight: FontWeight.w500,
-      fontFamily: MyFonts.typosBold,
+      fontWeight: FontWeight.w700,
     ),
     headline2: _baseTheme.textTheme.headline2!.copyWith(
       color: MyColors.black,
-      fontSize: 20,
+      fontSize: 20.0,
       height: 1.5,
-      fontWeight: FontWeight.w500,
-      fontFamily: MyFonts.typosBold,
+      fontWeight: FontWeight.w700,
     ),
     headline3: _baseTheme.textTheme.headline3!.copyWith(
-      fontSize: 16,
-      color: MyColors.primaryColor,
+      fontSize: 18.0,
+      color: MyColors.black,
       height: 1.5,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'typos',
+      fontWeight: FontWeight.w700,
     ),
     headline4: _baseTheme.textTheme.headline4!.copyWith(
       color: MyColors.black,
-      fontSize: 16,
+      fontSize: 16.0,
       height: 1.5,
-      fontWeight: FontWeight.w500,
-      fontFamily: MyFonts.typosSemi,
+      fontWeight: FontWeight.w700,
     ),
     headline5: _baseTheme.textTheme.headline5!.copyWith(
-      fontSize: 14,
-      color: MyColors.white,
+      fontSize: 14.0,
+      color: MyColors.black,
       height: 1.5,
-      fontWeight: FontWeight.w400,
-      fontFamily: MyFonts.typos,
+      fontWeight: FontWeight.w700,
     ),
     headline6: _baseTheme.textTheme.headline6!.copyWith(
-      fontSize: 12,
-      color: MyColors.black,
-      height: 1.5,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'typos',
-    ),
-    bodyText1: _baseTheme.textTheme.bodyText1!.copyWith(
-      fontSize: 14,
-      color: MyColors.black,
-      height: 1.5,
-      fontWeight: FontWeight.normal,
-      fontFamily: MyFonts.typos,
-    ),
-    bodyText2: _baseTheme.textTheme.bodyText2!.copyWith(
-      fontSize: 14,
+      fontSize: 12.0,
       color: MyColors.black,
       height: 1.5,
       fontWeight: FontWeight.w400,
-      fontFamily: 'typos',
     ),
+    bodyText1: _baseTheme.textTheme.bodyText1!.copyWith(
+        fontSize: 16.0,
+        color: MyColors.black,
+        height: 1.5,
+        fontWeight: FontWeight.normal
+    ),
+    bodyText2: _baseTheme.textTheme.bodyText2!.copyWith(
+        fontSize: 14.0,
+        color: MyColors.black,
+        height: 1.5,
+        fontWeight: FontWeight.w700
+    ),
+
     subtitle1: _baseTheme.textTheme.subtitle1!.copyWith(
-      fontSize: 12,
-      color: MyColors.black,
-      height: 1.5,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'typos',
+        fontSize: 12.0,
+        color: MyColors.black,
+        height: 1.5,
+        fontWeight: FontWeight.w700
     ),
     subtitle2: _baseTheme.textTheme.subtitle2!.copyWith(
-        fontSize: 10,
-        color: MyColors.black.withOpacity(0.6),
+        fontSize: 12.0,
+        color: MyColors.black,
         //  decoration: TextDecoration.underline,
         height: 1.5,
-        fontFamily: MyFonts.typos,
-        fontWeight: FontWeight.normal),
+        fontWeight: FontWeight.normal
+    ),
     caption: _baseTheme.textTheme.caption!.copyWith(
-      fontSize: 12,
-      color: MyColors.greyFont,
+      fontSize: 12.0,
+      color: MyColors.grey,
       height: 1.5,
-      fontFamily: 'typos',
     ),
     overline: _baseTheme.textTheme.overline!.copyWith(
       fontSize: 8,
+
       color: MyColors.grey,
       height: 1.5,
-      fontFamily: 'typos',
     ),
   );
 

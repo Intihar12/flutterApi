@@ -1,8 +1,7 @@
 class MyFonts {
   @deprecated
-  static const typos = 'typos';
-  static const typosBold = 'typosbold';
-  static const typosSemi = 'typossemi';
+  static const helveticaNeue = 'Helvetica Neue';
+  static const roboto = 'Roboto';
 
   MyFonts._();
 }

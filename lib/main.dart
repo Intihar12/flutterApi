@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterapis/auth/login/login.dart';
 import 'package:flutterapis/auth/signup/signup.dart';
 import 'package:flutterapis/ui/home/home.dart';
+import 'package:flutterapis/ui/login/login.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      home: Login(),
       // home: LogIn(),
     );
   }

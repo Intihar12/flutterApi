@@ -16,9 +16,9 @@ class ServiceSellerModal {
     this.errors,
   });
 
-  String ?message;
-  String ?status;
-  Data ?data;
+  String? message;
+  String? status;
+  Data? data;
   String? errors;
 
   factory ServiceSellerModal.fromJson(Map<String, dynamic> json) => ServiceSellerModal(
@@ -43,7 +43,7 @@ class Data {
   });
 
   List<CompanyElement>? company;
-  List<Individual> ?individual;
+  List<Individual>? individual;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     company: List<CompanyElement>.from(json["company"].map((x) => CompanyElement.fromJson(x))),
@@ -65,7 +65,7 @@ class CompanyElement {
 
   IndividualClass? company;
   String? totalRating;
-  String ?totalReviews;
+  String? totalReviews;
 
   factory CompanyElement.fromJson(Map<String, dynamic> json) => CompanyElement(
     company: IndividualClass.fromJson(json["company"]),
@@ -96,10 +96,10 @@ class IndividualClass {
   String? firstName;
   String? lastName;
   String? email;
-  String ?phone;
-  String ?profileImage;
-  String ?businessAddress;
-  String ?description;
+  String? phone;
+  String? profileImage;
+  String? businessAddress;
+  String? description;
 
   factory IndividualClass.fromJson(Map<String, dynamic> json) => IndividualClass(
     id: json["id"],
@@ -131,7 +131,7 @@ class Individual {
     this.totalReviews,
   });
 
-  IndividualClass ?individual;
+  IndividualClass? individual;
   String? totalRating;
   String? totalReviews;
 

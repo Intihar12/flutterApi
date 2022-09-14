@@ -11,6 +11,7 @@ class SingleToneValue {
   String resendEmail = "";
   String userId = "";
   String? deviceToken;
+  String? assesToken;
   double currentLng = 74.24347511142429;
 String? contactname;
   String? email;

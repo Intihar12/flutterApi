@@ -141,8 +141,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           hintText: widget.text,
           hintStyle: TextStyle(
             color:
-            widget.hintColor == null ? MyColors.greyFont : widget.hintColor,
-            fontFamily: MyFonts.typos,
+            widget.hintColor == null ? MyColors.grey72 : widget.hintColor,
+          //  fontFamily: MyFonts.typos,
             fontWeight: FontWeight.normal,
             fontSize: getFont(Dimens.size14),
           ),

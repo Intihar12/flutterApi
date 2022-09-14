@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutterapis/controller/fake_store_controller/fake_store_controller.dart';
 import 'package:flutterapis/models/products/products_modal.dart';
+import 'package:flutterapis/ui/get_apis/get_apis.dart';
 import 'package:flutterapis/values/my_colors.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../controller/SellerListController/SellerListController.dart';
 import '../../controller/home_controller/home_controller.dart';
-import '../details_page/details_page.dart';
+
 
 class Home extends StatelessWidget {
    Home({Key? key}) : super(key: key);
 final controller=Get.put(HomeController());
-final  productcontroller=Get.put(FakeStoreController());
+final  productcontroller=Get.put(SellerListController());
 
 
  static String imagesBaseUrl = 'https://zeeshannawaz.com/p_services/';
@@ -113,7 +114,14 @@ Text( productcontroller.products.data![index].name!),
                 ):Center(
                   child: CircularProgressIndicator(),
                 );
-              })
+              }),
+SizedBox(height: 20,),
+
+              ElevatedButton(onPressed: (){
+                Get.to(GetApi());
+
+
+              }, child: Text("Buy Subscriptions"))
 
 
           ],),
