@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterapis/models/products/products_modal.dart';
 import 'package:flutterapis/ui/get_apis/get_apis.dart';
 import 'package:flutterapis/values/my_colors.dart';
@@ -7,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 
 import '../../controller/SellerListController/SellerListController.dart';
 import '../../controller/home_controller/home_controller.dart';
+import '../../widgets/custom_textfield.dart';
 
 
 class Home extends StatelessWidget {
@@ -20,12 +22,9 @@ final  productcontroller=Get.put(SellerListController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: GestureDetector(
-          onTap: ()
-          {
-            productcontroller.fackStoreData();
-          },
-          child: Text("Home"))),
+      appBar: AppBar(
+          backgroundColor: MyColors.viewcolor,
+          title: Text("Home")),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -34,6 +33,25 @@ final  productcontroller=Get.put(SellerListController());
             mainAxisAlignment: MainAxisAlignment.center,
             children:  [
               SizedBox(height: 20,),
+              TextField(
+                onChanged:(String){
+                  productcontroller.filterSearch(String);
+                } ,
+              ),
+
+              // CustomTextField3(
+              //   onChanged: productcontroller.filterSearch(),
+              //
+              //   text: "I’m looking for...",
+              //   // controller: controller.emailController,
+              //   keyboardType: TextInputType.text,
+              //   length:80,
+              //   inputFormatters: FilteringTextInputFormatter.singleLineFormatter,
+              //
+              //
+              // ),
+              SizedBox(height: 20,),
+
 
 //               controller.obx((models) {
 //                 return SizedBox(
@@ -83,25 +101,26 @@ final  productcontroller=Get.put(SellerListController());
                 return productcontroller.isLoaded.value? SizedBox(height: 400,
 
                 child:  GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: 3 / 2,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                       // maxCrossAxisExtent: 200,
+                     //   childAspectRatio: 3 / 2,
+                      crossAxisCount: 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 40),
                     itemCount: productcontroller.products.data!.length,
                     itemBuilder: (BuildContext context,int index){
                       Get.log("Images : ${ productcontroller.products.data![index].image}");
                     return Column(
                       children: [
-Text( productcontroller.products.data![index].name!),
+Text( productcontroller.productList[index].name!),
                         InkWell(
                           onTap: (){
                             productcontroller.serviceStoreFunction(productcontroller.products.data![index].id);
                            // Get.to(DetailsPage());
                           },
                           child: SizedBox(
-                            height:100,
-                            width:150,
+                            height:80,
+                            width:80,
                             child: FadeInImage.assetNetwork(
                               placeholder: 'image/img.png',
                               image: "${imagesBaseUrl}${ productcontroller.products.data![index].image}",
@@ -117,11 +136,14 @@ Text( productcontroller.products.data![index].name!),
               }),
 SizedBox(height: 20,),
 
-              ElevatedButton(onPressed: (){
+              ElevatedButton(
+                  onPressed: (){
                 Get.to(GetApi());
 
 
-              }, child: Text("Buy Subscriptions"))
+              }, style: ElevatedButton.styleFrom(
+                primary: MyColors.viewcolor, // Background color
+              ), child: Text("Buy Subscriptions"))
 
 
           ],),

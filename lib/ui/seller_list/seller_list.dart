@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterapis/values/dimens.dart';
 import 'package:flutterapis/values/my_colors.dart';
 import 'package:get/get.dart';
 
 import '../../controller/SellerListController/SellerListController.dart';
 import '../../values/my_imgs.dart';
+import '../../widgets/customTextfield.dart';
+import '../../widgets/custom_textfield.dart';
+import '../filters/filters.dart';
 import '../profile_serviceses/profile_serviceses.dart';
 
 class SellerListPage extends StatelessWidget {
@@ -23,6 +27,7 @@ class SellerListPage extends StatelessWidget {
         return Scaffold(
             backgroundColor: MyColors.cardGrey,
             appBar: AppBar(
+              backgroundColor: MyColors.viewcolor,
               title: Text("intuu"),
             ),
             body: Padding(
@@ -30,7 +35,19 @@ class SellerListPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    CustomTextField3(
+                      text: "I’m looking for...",
+                     // controller: controller.emailController,
+                      keyboardType: TextInputType.text,
+                      length:80,
+                      inputFormatters: FilteringTextInputFormatter.singleLineFormatter,
+                      suffixIcon: GestureDetector(
+                          onTap: (){
+                            Get.to(Filters());
+                          },
+                          child: Icon(Icons.filter)),
 
+                    ),
                     Text("Panters near you"),
 
                     SizedBox(height: 20,),
@@ -47,7 +64,7 @@ class SellerListPage extends StatelessWidget {
                               },
                               child: Container(
                                 alignment: Alignment.center,
-                                width: 140,
+                                width: 120,
                                 height: 30,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -79,7 +96,7 @@ class SellerListPage extends StatelessWidget {
                               },
                               child: Container(
                                 alignment: Alignment.center,
-                                width: 140,
+                                width: 120,
                                 height: 30,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -133,7 +150,7 @@ class SellerListPage extends StatelessWidget {
 
                                           SizedBox(
                                             height: 70,
-                                            width: 150,
+                                            width: 70,
                                             child: FadeInImage.assetNetwork(
                                               placeholder: 'image/img.png',
                                               image: "${imagesBaseUrl}${controller
@@ -157,7 +174,7 @@ class SellerListPage extends StatelessWidget {
                                                   Text(controller.serviceSellerModal
                                                       .data!.individual![index]
                                                       .individual!.firstName!),
-                                                  SizedBox(width: Dimens.size14,),
+                                                  SizedBox(width: Dimens.size8,),
                                                   Text(controller.serviceSellerModal
                                                       .data!.individual![index]
                                                       .individual!.lastName!),
@@ -190,7 +207,7 @@ class SellerListPage extends StatelessWidget {
 
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20.0, right: 20),
+                                            left: 10.0, right: 10),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment
                                               .spaceBetween,
@@ -198,54 +215,15 @@ class SellerListPage extends StatelessWidget {
                                             InkWell(
                                               onTap:(){
 controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.individual![index].individual!.id);
-// Get.bottomSheet(
-//     Container(
-//   height: 500,
-//   color: Colors.white,
-//
-//   child: Padding(
-//     padding: const EdgeInsets.all(20.0),
-//     child: Column(children: [
-//
-//       Text("Approximate Availablity"),
-//
-//       SizedBox(
-//         height: 200,
-//         child: ListView.builder(
-//
-//             scrollDirection: Axis.vertical,
-//             shrinkWrap: true,
-//             itemCount: controller.getAllUserAvalibility.data!.length,
-//             itemBuilder: (BuildContext context,int index){
-//               Get.log("get all users avalability ${controller.getAllUserAvalibility.data!.length}");
-//               return Container(
-//                 width: double.infinity,
-//                 decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(5),
-//                     color: MyColors.avalabilitycolor
-//                 ),
-//                 child: Row(children: [
-//                   Column(children: [
-//                     Text(controller.getAllUserAvalibility.data![index].session![0].session!),
-//
-//                     Text(controller.getAllUserAvalibility.data![index].day.toString())
-//                   ],)
-//                 ],),
-//               );
-//             }),
-//       )
-//     ],),
-//   ),
-// )
-// );
-
-                                                settingModalBottomSheet(context);
+controller.isgetAllUserAvalibility=false.obs;
+controller.update();
+settingModalBottomSheet(context);
 
 },
                                               child: Container(
                                                 alignment: Alignment.center,
                                                 height: 30,
-                                                width: 150,
+                                                width: 125,
                                                 decoration: BoxDecoration(
                                                     borderRadius: BorderRadius
                                                         .circular(5),
@@ -266,7 +244,7 @@ controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.in
                                               child: Container(
                                                 alignment: Alignment.center,
                                                 height: 30,
-                                                width: 150,
+                                                width: 100,
                                                 decoration: BoxDecoration(
                                                     borderRadius: BorderRadius
                                                         .circular(5),
@@ -307,7 +285,7 @@ controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.in
 
                                   SizedBox(
                                     height: 100,
-                                    width: 150,
+                                    width: 70,
                                     child: FadeInImage.assetNetwork(
                                       placeholder: 'image/img.png',
                                       image: "${imagesBaseUrl}${controller
@@ -345,7 +323,7 @@ controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.in
                                 // Text(modals.),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 20.0, right: 20),
+                                      left: 10.0, right: 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment
                                         .spaceBetween,
@@ -354,6 +332,8 @@ controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.in
 
                                         onTap:(){
                                           controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.company![index].company!.id);
+                                         controller.isgetAllUserAvalibility=false.obs;
+                                         controller.update();
                                           settingModalBottomSheet(context);
 
 
@@ -361,7 +341,7 @@ controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.in
                                         child: Container(
                                           alignment: Alignment.center,
                                           height: 30,
-                                          width: 150,
+                                          width: 125,
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(5),
                                               color: MyColors.white,
@@ -381,7 +361,7 @@ controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.in
                                         child: Container(
                                           alignment: Alignment.center,
                                           height: 30,
-                                          width: 150,
+                                          width: 100,
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(5),
                                               color: MyColors.viewcolor,
@@ -417,116 +397,128 @@ controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.in
 
 void settingModalBottomSheet(context){
   final controller = Get.put(SellerListController());
-  controller.getAllUserAvalibility==null ?Center(child: CircularProgressIndicator(),):
+  //controller.getAllUserAvalibility.data!.isEmpty ?Center(child: CircularProgressIndicator(),):
+
+
   showModalBottomSheet(
       context: context,
       builder: (BuildContext bc){
-        return  ClipRRect(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
-          child: Container(
-            height: 550,
-            color: Colors.white,
-//decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20))),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(children: [
+        return
+          GetBuilder<SellerListController>(
+            builder: (contextController) {
+              return ClipRRect(
+              borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
+              child: Container(
+                height: 550,
+                color: Colors.white,
+                child:  contextController.getAllUserAvalibility.data!.length==0 ?Center(child: Container(
+                    child: Text("No availibility time!")
+                ),): Padding(
+                  padding: const EdgeInsets.only(left: 10.0,right: 10,top: 10),
+                  child: Column(children: [
 
-                Text("Approximate Availablity"),
+                    Text("Approximate Availablity"),
 SizedBox(height: 8,),
-                Expanded(
-                 // height: 400,
-                  child: ListView.builder(
+                    // controller.getAllUserAvalibility.data!.isEmpty ?Center(child: Container(
+                    //  child: Text("No Availaibility")
+                    // ),):
 
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: controller.getAllUserAvalibility.data!.length,
-                      itemBuilder: (BuildContext context,int index){
-                        Get.log("get all users avalability ${controller.getAllUserAvalibility.data!.length}");
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 15.0),
-                          child: Container(
-                            padding: EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: MyColors.avalabilitycolor
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                              Text(controller.getAllUserAvalibility.data![index].day.toString()),
-SizedBox(width: 100,),
-                            Column(children: [
-                              Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: MyColors.avalabilitycolor,
-                                  border: Border.all(color: MyColors.grey)
-                                ),
-                                child: Icon(Icons.done),
-                              ),
-SizedBox(height: 10,),
-                              Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    color: MyColors.avalabilitycolor,
-                                    border: Border.all(color: MyColors.grey)
-                                ),
-                                child: Icon(Icons.done),
-                              )
-                            ],),
-SizedBox(width: 10,),
-                            Expanded(
+                    Expanded(
+                     // height: 400,
+                      child: Obx(
+                          ()=>  controller.isgetAllUserAvalibility.value ? ListView.builder(
 
-                              child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                  itemCount: controller.getAllUserAvalibility.data![index].session!.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (BuildContext ctx, int ind){
-                                return Container(
-                                //  height: 20,
-                                  width: 30,
-                                  margin: EdgeInsets.all(6),
-
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-
-                                      children: [
-                                    ind==0 ?   Icon(Icons.wb_sunny,color: Colors.yellow,size: 15,)
-                                        :  Image.asset(MyImgs.afternoon,width: 15,height: 15,),
-                                       // Icon(Icons.wb_sunny,color: Colors.yellow,size: 15,),
-                                        SizedBox(width: 10,),
-                                        Center(
-                                          child: Text(   controller.getAllUserAvalibility.data![index].session![ind].session!),
-                                        ),
-                                      ],
-                                    ),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: controller.getAllUserAvalibility.data!.length,
+                            itemBuilder: (BuildContext context,int index){
+                              Get.log("get all users avalability ${controller.getAllUserAvalibility.data!.length}");
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 15.0),
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: MyColors.avalabilitycolor
                                   ),
-                                );
-                              }),
-                            )
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                    Text(controller.getAllUserAvalibility.data![index].day.toString()),
+SizedBox(width: 70,),
+                                  Column(children: [
+                                    Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        color: MyColors.avalabilitycolor,
+                                        border: Border.all(color: MyColors.grey)
+                                      ),
+                                      child: Icon(Icons.done),
+                                    ),
+SizedBox(height: 10,),
+                                    Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          color: MyColors.avalabilitycolor,
+                                          border: Border.all(color: MyColors.grey)
+                                      ),
+                                      child: Icon(Icons.done),
+                                    )
+                                  ],),
+SizedBox(width: 5,),
+                                  Expanded(
 
-                            //  Text(controller.getAllUserAvalibility.data![index].session![0].session!),
+                                    child: ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                        itemCount: controller.getAllUserAvalibility.data![index].session!.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (BuildContext ctx, int ind){
+                                      return Container(
+                                      //  height: 20,
+                                        width: 40,
+                                        margin: EdgeInsets.all(6),
 
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: Row(
 
+                                            children: [
+                                          ind==0 ?   Icon(Icons.wb_sunny,color: Colors.yellow,size: 15,)
+                                              :  Image.asset(MyImgs.afternoon,width: 15,height: 15,),
+                                             // Icon(Icons.wb_sunny,color: Colors.yellow,size: 15,),
+                                              //SizedBox(width: 5,),
+                                              Center(
+                                                child: Text(   controller.getAllUserAvalibility.data![index].session![ind].session!,style: TextStyle(fontSize: 12),),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  )
 
+                                  //  Text(controller.getAllUserAvalibility.data![index].session![0].session!),
 
-
-                            ],),
-                          ),
-                        );
-                      }),
-                )
-              ],),
-            ),
-          ),
+                                  ],),
+                                ),
+                              );
+                            })
+                              :Center(child: CircularProgressIndicator(),),
+                      ),
+                    )
+                  ],),
+                ),
+              ),
         );
+            }
+          );
+        //:Center(child: CircularProgressIndicator(),);
 
       }
   );

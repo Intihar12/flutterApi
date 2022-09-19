@@ -78,6 +78,7 @@ class MyColors {
   static const Color grey200 = Color(0xFFEEEEEE);
   static const Color fadedBlue = Color(0xFFE8F1FF);
   static const Color cardGrey = Color(0xFFE5E5E5);
+  static const Color appbar = Color(0xFFECECEC);
   static const Color gray = Color(0xFF323F4B);
   static const Color yellow100 = Color(0xFFFFECB3);
   static const Color transparent = Color(0xFFF5F5F5);

@@ -148,7 +148,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           contentPadding: const EdgeInsets.only(left: 8, top: 16),
           prefixIcon: widget.icon,
-          suffixText: widget.suffixtext,
+
+         // suffixText: widget.suffixtext,
           focusColor: MyColors.green50,
         ),
       ),

@@ -27,6 +27,7 @@ class Login extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 length:80,
                 inputFormatters: FilteringTextInputFormatter.singleLineFormatter,
+
               ),
               SizedBox(height: 20,),
 

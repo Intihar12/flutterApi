@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 
 import '../../models/buy_subscription_modal/buy_subscription_modal.dart';
 import '../../models/cancle_booking_modal/cancle_booking_modal.dart';
+import '../../models/filter_seller_modal/filter_seller_modal.dart';
 import '../../models/my_appointments/my_appointments_modal.dart';
 import '../../models/products/products_modal.dart';
 import '../../models/seller_user_plan_modal/seller_user_plan_modal.dart';
@@ -51,10 +52,13 @@ var loginToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhbmlzaEBnbWF
 
     var response =await get("p_services/service/get_all_service", headers: {
     //  "accessToken":"$loginToken",
+      "Accept": "application/json",
       "accessToken": "${SingleToneValue.instance.assesToken}"
     });
 
-
+    Get.log(" token : ${SingleToneValue.instance.assesToken}");
+    Get.log("hello3");
+Get.log("repose hoom1 ${response.body}");
     if(response.hasError){
       return Future.error(response.statusText!);
     }else{
@@ -122,7 +126,9 @@ Future<SellerProfileModal> sellerProfileApi(var id)async{
 /// get user avalability
 
 Future<GetAllUserAvalibility> getAlluserAvalabilityApi(var sellerId)async{
-var response= await post('p_services/users/get_seller_availibity_time',{
+  httpClient.timeout = const Duration(seconds: 100);
+
+  var response= await post('p_services/users/get_seller_availibity_time',{
 
   "seller_id":sellerId
 },headers: {
@@ -191,6 +197,38 @@ Future<CanceldBookingModal>cancledBookingApi(var bookingid)async{
       CanceldBookingModal canceldBookingModal=CanceldBookingModal.fromJson(response.body);
       return canceldBookingModal;
     }
+}
+
+/// filter api
+
+Future<FilterSelectModal>filterSellerApi(
+    {String? distance, String? session, String? dat, String? rating, String? sortby})async{
+
+  Map body={
+    "distance":distance,
+    "session":session,
+    "date":dat,
+    "rating":rating,
+    "sortby":sortby,
+   // "serviceId":serviceId
+  };
+  body.removeWhere((key, value)=>value=="");
+  Get.log("Map Body is : $body");
+
+
+
+
+  var response=await post("p_services/users/filter_sellers",body,headers: {
+    "Accept":"Application/json",
+    "accessToken":"${SingleToneValue.instance.assesToken}"
+  });
+  Get.log("jkddjkdjkd response sellet filter${response.body}");
+  if(response.hasError){
+    return Future.error(response.statusText!);
+  }else{
+    FilterSelectModal filterSelectModal=FilterSelectModal.fromJson(response.body);
+    return filterSelectModal;
+  }
 }
 
 }

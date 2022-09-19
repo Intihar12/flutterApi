@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapis/controller/SellerListController/SellerListController.dart';
+import 'package:flutterapis/values/my_colors.dart';
 import 'package:get/get.dart';
+
+import '../filters/filters.dart';
 
 
 class GetApi extends StatelessWidget {
@@ -10,6 +13,7 @@ final controller=Get.put(SellerListController());
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: MyColors.viewcolor,
       title: Text("Get Apis"),
       ),
       body: Center(
@@ -20,13 +24,24 @@ final controller=Get.put(SellerListController());
             controller.getPlanFunction();
 
 
-          }, child: Text("Pricing")),
+          },style: ElevatedButton.styleFrom(primary: MyColors.viewcolor), child: Text("Pricing")),
 
             ElevatedButton(onPressed: (){
               controller.myAppointmentFunction();
 
 
-            }, child: Text("Bookings"))
+            }, style: ElevatedButton.styleFrom(
+              primary: MyColors.viewcolor, // Background color
+            ), child: Text("Bookings"))
+            ,
+
+            ElevatedButton(onPressed: (){
+             // controller.myAppointmentFunction();
+Get.to(Filters());
+
+            }, style: ElevatedButton.styleFrom(
+              primary: MyColors.viewcolor, // Background color
+            ), child: Text("Filters"))
         ],),
       ),
     );

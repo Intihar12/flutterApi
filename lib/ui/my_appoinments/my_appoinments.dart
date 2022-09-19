@@ -97,7 +97,7 @@ class MyAppointments extends StatelessWidget {
                                       children: [
                                         SizedBox(
                                             height: 140,
-                                            width: 140,
+                                            width: 100,
                                             child: FadeInImage.assetNetwork(
                                               placeholder: "",
                                               image:
@@ -200,7 +200,7 @@ Text("Are you sure! you want to cancled\n this order"),
                                                   ),
                                                 ),
                                                 const SizedBox(
-                                                  width: 70,
+                                                  width: 30,
                                                 ),
                                                 const Text("Confirmed",
                                                     style: TextStyle(
@@ -240,7 +240,7 @@ Text("Are you sure! you want to cancled\n this order"),
                                     children: [
                                       SizedBox(
                                           height: 140,
-                                          width: 140,
+                                          width: 100,
                                           child: FadeInImage.assetNetwork(
                                             placeholder: "",
                                             image:
@@ -297,7 +297,7 @@ Text("Are you sure! you want to cancled\n this order"),
                                               crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
                                                 SizedBox(),
-                                                SizedBox(width: 120,),
+                                                SizedBox(width: 80,),
                                                 Container(
 alignment: Alignment.centerRight,
                                                   child: Text(controller.myAppointmentModal.data!.pastBookings![index].bookingStatus.toString(),style: TextStyle(color: MyColors.viewcolor),),

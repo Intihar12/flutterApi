@@ -11,8 +11,8 @@ final controller=Get.put(SellerListController());
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyColors.cardGrey,
-        title: Text("Buy Subscriptions",style:  TextStyle(color: MyColors.black),),
+        backgroundColor: MyColors.viewcolor,
+        title: Text("Buy Subscriptions",style:  TextStyle(color: MyColors.white),),
       ),
 
       body: Padding(
@@ -66,7 +66,7 @@ Text("Our Pricing",style: TextStyle(color: MyColors.viewcolor,fontSize: 30,fontW
                       ),
 
                       SizedBox(
-                        height: 400,
+                        height: 300,
                         width: 300,
                         child: ListView.builder(
                           scrollDirection: Axis.vertical,
@@ -87,7 +87,7 @@ Text("Our Pricing",style: TextStyle(color: MyColors.viewcolor,fontSize: 30,fontW
                                   SizedBox(height: 10,),
                                   Text(controller.getPlanModal.data![index].features![ind].createdAt.toString()),
 
-SizedBox(height: 100,),
+SizedBox(height: 150,),
 
                                   Container(
                                     padding: EdgeInsets.only(left: 10,right: 10,top: 5),
@@ -115,47 +115,7 @@ SizedBox(height: 100,),
 
 
 
-            //
-            // Container(
-            //   color: MyColors.viewcolor,
-            //   child: Center(
-            //     child: Padding(
-            //       padding: const EdgeInsets.only(top: 10.0,bottom: 10),
-            //       child: Column(
-            //
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //         Text(controller.getPlanModal.data![0].title.toString(),style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
-            //           SizedBox(height: 10,),
-            //
-            //           Center(
-            //           child: Row(
-            //             crossAxisAlignment: CrossAxisAlignment.center,
-            //             mainAxisAlignment: MainAxisAlignment.center,
-            //             children: [
-            //               Text(" \$ ${controller.getPlanModal.data![0].price.toString()}  ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-            //               Text("/ ${controller.getPlanModal.data![0].days.toString()}")
-            //             ],
-            //           ),
-            //         ),
-            //           SizedBox(height: 10,),
-            //           Text("Try it for 30 days",style: TextStyle(color: MyColors.white,))
-            //
-            //       ],),
-            //     ),
-            //   ),
-            // ),
-            //
-            // Container(
-            //   color: MyColors.cardGrey,
-            //
-            //
-            //   child: Column(
-            //     children: [
-            //
-            //     ],
-            //   ),
-            // )
+
 
 
 

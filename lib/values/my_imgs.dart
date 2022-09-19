@@ -3,6 +3,7 @@ class MyImgs {
   static const String logo2 = "assets/images/logo2.png";
   static const String afternoon = "image/afternoon.png";
   static const String errorimage = "image/errorimage.png";
+  static const String filter = "image/filter.png";
 
 
   MyImgs._();

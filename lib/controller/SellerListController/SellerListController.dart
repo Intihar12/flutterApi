@@ -6,7 +6,7 @@ import 'package:flutterapis/models/buy_subscription_modal/buy_subscription_modal
 import 'package:flutterapis/models/cancle_booking_modal/cancle_booking_modal.dart';
 import 'package:flutterapis/models/get_all_user_avalability/get_all_user_avalibility.dart';
 import 'package:flutterapis/models/my_appointments/my_appointments_modal.dart';
-import 'package:flutterapis/models/products/products_modal.dart';
+import 'package:flutterapis/models/products/products_modal.dart' as product;
 import 'package:flutterapis/models/sellerProfileModal/seller_profile_modal.dart';
 import 'package:flutterapis/models/service_seller_modal/service_seller_modal.dart';
 import 'package:flutterapis/ui/pricing/pricing.dart';
@@ -16,24 +16,39 @@ import 'package:get_storage/get_storage.dart';
 
 
 import '../../data/SellerListApi/SellerListApi.dart';
+import '../../models/filter_seller_modal/filter_seller_modal.dart';
 import '../../ui/home/home.dart';
 import '../../ui/my_appoinments/my_appoinments.dart';
 import '../../ui/profile_serviceses/profile_serviceses.dart';
 import '../../ui/seller_list/seller_list.dart';
+import '../../ui/seller_list_filters_applied/seller_list_filters_applied.dart';
 import '../../widgets/toasts.dart';
 
 class SellerListController extends GetxController {
 
   final fackStoreApi=SellerListApi();
-  RxBool isLoaded=false.obs;
-  RxBool isSellersLoaded=false.obs;
   RxBool isgetAllUserAvalibility=false.obs;
-  RxBool isSellerProfileLoading=false.obs;
+
   RxBool isIndividual=false.obs;
 RxBool isUpComing=true.obs;
+int isDistance=1;
+int isMorning=1;
+double sliderValue=0;
+double starsRating=0;
+String dateformet="";
+//int selectedDate=0;
+  DateTime dateTime = DateTime.now();
 
-
-  Products products=Products();
+/// isloading
+  RxBool isLoaded=false.obs;
+  RxBool isSellersLoaded=false.obs;
+  RxBool isSellerProfileLoading=false.obs;
+  RxBool isFilterLoading=false.obs;
+  RxBool isSellerFilterLoading=false.obs;
+  ///
+  ///
+  product.Products products=product.Products();
+  FilterSelectModal filterSelectModal=FilterSelectModal();
   CanceldBookingModal canceldBookingModal=CanceldBookingModal();
 MyAppointmentModal myAppointmentModal=MyAppointmentModal();
   GetPlanModal getPlanModal=GetPlanModal();
@@ -58,6 +73,7 @@ GetAllUserAvalibility getAllUserAvalibility=GetAllUserAvalibility();
         CustomToast.successToast(msg: "${value.message}");
 
         Get.to(()=> Home());
+        fackStoreData();
       }else{
         CustomToast.failToast(msg: "${value.errors}");
       }
@@ -72,17 +88,22 @@ GetAllUserAvalibility getAllUserAvalibility=GetAllUserAvalibility();
     loginFunction(emailController.text, passwordController.text);
   }
 
+  ///
+  List<product.Datum> productList=<product.Datum>[].obs;
 
+  ///
   fackStoreData()async{
     Get.log("hello");
     await fackStoreApi.fakeProducts().then((value) {
      // Get.log("${value.toList()}");
 
-
+      Get.log("hello2");
         if(value.status==true){
           CustomToast.successToast(msg: "success");
           products=value;
+
           isLoaded.value=!isLoaded.value;
+          productList=products.data!;
           update();
         }else{
 
@@ -93,6 +114,8 @@ GetAllUserAvalibility getAllUserAvalibility=GetAllUserAvalibility();
       } );
 
   }
+
+  // RxList<selller.Data> foundIndividualList=<Data>[].obs;
 
   serviceStoreFunction(var serviceID)async{
    // Get.dialog(ProgressBar(),barrierDismissible: false);
@@ -144,11 +167,12 @@ sellerProfileFunction(var sellerId)async{
 /// get all users Avalibility
 
   gatAllUsersAvalabilityFunction(var sellerid)async{
-  //  Get.dialog(ProgressBar(),barrierDismissible: false);
+   // Get.dialog(ProgressBar(),barrierDismissible: false);
 
     await fackStoreApi.getAlluserAvalabilityApi(sellerid).then((value) {
       if(value.status=="1"){
-     //   Get.back();
+      // Get.back();
+        update();
         getAllUserAvalibility=value;
         isgetAllUserAvalibility.value=!isgetAllUserAvalibility.value;
         CustomToast.successToast(msg: "${value.message}");
@@ -205,14 +229,71 @@ sellerProfileFunction(var sellerId)async{
       }
     });
   }
+/// filter sellers function
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    fackStoreData();
+
+
+
+  var totalFilter=0;
+
+  filterSellerFunctions()async{
+
+   try{
+    await fackStoreApi.filterSellerApi(
+        distance:sliderValue==0?"":sliderValue.toString(),
+        session: isMorning==1?"1":"2",
+        dat:dateformet==""?"":dateformet, rating: starsRating==0?"":starsRating.toString(), sortby: isDistance==1?"distance":"ratings").then((value) {
+
+      if(value.status=="1"){
+        filterSelectModal=value;
+        isSellerFilterLoading.value=!isSellerFilterLoading.value;
+        totalFilter=filterSelectModal.data!.company!.length + filterSelectModal.data!.individual!.length;
+        update();
+        CustomToast.successToast(msg: "${value.message}");
+        Get.to(()=>FilterSellerListPage());
+      }else{
+        CustomToast.failToast(msg: "${value.errors}");
+      }
+    });}catch(e){
+  Get.snackbar(     "Error", e.toString().replaceAll('Error:', "Something Went Wrong"));
+  }
   }
 
+
+  // Rx<D> allUsers= Rx <List<Map<String, dynamic>>> ([]);
+ // final String? allsellers=[];
+
+
+  @override
+
+
+  void onInit() {
+    // TODO: implement onInit
+    // fackStoreData();
+    super.onInit();
+
+
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+
+  }
+
+
+   filterSearch(String? names){
+    List<product.Datum> results=[];
+
+    if(names!.isEmpty){
+      results=productList;
+      update();
+    }else{
+      results=productList.where((element) => element.name.toString().toLowerCase().contains(names.toLowerCase())).toList();
+    }
+    productList=results;
+  }
 }
 
 ///

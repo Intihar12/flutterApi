@@ -64,7 +64,7 @@ crossAxisSpacing: 10
 
              SizedBox(
                // height: 100,
-                width: 120,
+                width: 90,
                child: FadeInImage.assetNetwork(
                  placeholder: 'image/img.png',
                  image: "$imagesBaseUrl${controller
