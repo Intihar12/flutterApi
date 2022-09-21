@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterapis/models/service_seller_modal/service_seller_modal.dart';
 import 'package:flutterapis/values/dimens.dart';
 import 'package:flutterapis/values/my_colors.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import '../../controller/SellerListController/SellerListController.dart';
 import '../../values/my_imgs.dart';
 import '../../widgets/customTextfield.dart';
 import '../../widgets/custom_textfield.dart';
+import '../../widgets/sellerlistbtnwidget.dart';
 import '../filters/filters.dart';
 import '../profile_serviceses/profile_serviceses.dart';
 
@@ -36,8 +38,16 @@ class SellerListPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextField3(
+                      onChanged: (value){
+
+                        sellercontroller.isIndividual.value==false ? sellercontroller.searchServicesSellerFunction(value,true)
+                            :sellercontroller.searchServicesSellerFunction(value,false) ;
+                      },
+                     // controller: sellercontroller.searchController,
+                      icon: Icon(Icons.search),
                       text: "I’m looking for...",
-                     // controller: controller.emailController,
+                      controller: sellercontroller.searchController,
+
                       keyboardType: TextInputType.text,
                       length:80,
                       inputFormatters: FilteringTextInputFormatter.singleLineFormatter,
@@ -45,93 +55,84 @@ class SellerListPage extends StatelessWidget {
                           onTap: (){
                             Get.to(Filters());
                           },
-                          child: Icon(Icons.filter)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image.asset(MyImgs.filter),
+                          )),
+
 
                     ),
+                    SizedBox(height: 10,),
+
                     Text("Panters near you"),
 
                     SizedBox(height: 20,),
-                    Obx(() =>
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                               // controller.isIndividual.value==true;
-                                controller.isIndividual.value =
-                                !controller.isIndividual.value;
-                                controller.update();
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 120,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
+                            // GestureDetector(
+                            //   onTap: () {
+                            //    // controller.isIndividual.value==true;
+                            //     controller.isIndividual.value =
+                            //     !controller.isIndividual.value;
+                            //     controller.update();
+                            //   },
+                            //   child: Container(
+                            //     alignment: Alignment.center,
+                            //     width: 120,
+                            //     height: 30,
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(5),
+                            //         color: Colors.white,
+                            //
+                            //         border: Border.all(color: controller
+                            //             .isIndividual.value
+                            //             ? MyColors.green
+                            //             : MyColors.grey)
+                            //     ),
+                            //
+                            //
+                            //     child: Text("Individual", style: TextStyle(
+                            //         fontSize: 14,
+                            //         fontWeight: FontWeight.w300,
+                            //         color: controller.isIndividual.value
+                            //             ? MyColors.starsColor
+                            //             : MyColors.black),
+                            //     ),),
+                            // ),
+                            FilterButtons(text: "Individual",index: 1,select: sellercontroller.isIndividuals,ontap: (){
+                              sellercontroller.isIndividuals=1;
+                              sellercontroller.isIndividual.value=!sellercontroller.isIndividual.value;
+                              sellercontroller.searchController.clear();
+                              sellercontroller.searchServicesSellerFunction("",true);
+                              sellercontroller.update();
 
-                                    border: Border.all(color: controller
-                                        .isIndividual.value
-                                        ? MyColors.green
-                                        : MyColors.grey)
-                                ),
+                            }),
 
+                            FilterButtons(text: "Company",index: 2,select: sellercontroller.isIndividuals,ontap: (){
+                              sellercontroller.isIndividuals=2;
+                              sellercontroller.isIndividual.value=!sellercontroller.isIndividual.value;
+                              sellercontroller.searchController.clear();
+                              sellercontroller.searchServicesSellerFunction("", false);
+                              sellercontroller.update();
 
-                                child: Text("Individual", style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                    color: controller.isIndividual.value
-                                        ? MyColors.starsColor
-                                        : MyColors.black),
-                                ),),
-                            ),
-
-
-                            GestureDetector(
-
-                              onTap: () {
-                                controller.isIndividual.value =
-                                !controller.isIndividual.value;
-                                controller.update();
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 120,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
-                                    border: Border.all(color: controller
-                                        .isIndividual.value
-                                        ? MyColors.grey
-                                        : MyColors.green)
-                                ),
-
-                                child: Text("Company", style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                    color: controller.isIndividual.value
-                                        ? MyColors.black
-                                        : MyColors.starsColor),),
-                              ),
-                            ),
+                            }),
                           ],),
-                    ),
+
 
                     SizedBox(height: Dimens.size14,),
 
 
-                    sellercontroller.isIndividual.value== true ?
+                    sellercontroller.isIndividuals== 1 ?
                 Expanded(
 
-                          child: ListView.builder(
-                            itemCount: controller.serviceSellerModal.data!
-                                .individual!.length,
+                          child: sellercontroller.serviceSellerIndividual.isNotEmpty ? ListView.builder(
+                            itemCount: sellercontroller.serviceSellerIndividual.length,
                             //  scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
-                              Get.log("$index : ${controller.serviceSellerModal
-                                  .data!.individual![index].individual!
+                              Get.log("$index : ${sellercontroller.serviceSellerIndividual[index].individual!
                                   .profileImage}");
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
@@ -153,9 +154,8 @@ class SellerListPage extends StatelessWidget {
                                             width: 70,
                                             child: FadeInImage.assetNetwork(
                                               placeholder: 'image/img.png',
-                                              image: "${imagesBaseUrl}${controller
-                                                  .serviceSellerModal.data!
-                                                  .individual![index].individual!
+                                              image: "${imagesBaseUrl}${sellercontroller
+                                                  .serviceSellerIndividual[index].individual!
                                                   .profileImage}",
                                               imageErrorBuilder: (context, e, stackTrace) =>
                                                   Image.asset(
@@ -171,11 +171,10 @@ class SellerListPage extends StatelessWidget {
                                             children: [
                                               Row(
                                                 children: [
-                                                  Text(controller.serviceSellerModal
-                                                      .data!.individual![index]
+                                                  Text(sellercontroller.serviceSellerIndividual[index]
                                                       .individual!.firstName!),
                                                   SizedBox(width: Dimens.size8,),
-                                                  Text(controller.serviceSellerModal
+                                                  Text(sellercontroller.serviceSellerModal
                                                       .data!.individual![index]
                                                       .individual!.lastName!),
                                                   SizedBox(height: Dimens.size14,),
@@ -187,14 +186,12 @@ class SellerListPage extends StatelessWidget {
                                               Row(
                                                 children: [
                                                   Icon(Icons.location_on_outlined,size: 10,),
-                                                  Text(controller.serviceSellerModal.data!
-                                                      .individual![index].individual!
+                                                  Text(sellercontroller.serviceSellerIndividual[index].individual!
                                                       .businessAddress!),
                                                 ],
                                               ),
 
-                                              Text(controller.serviceSellerModal.data!
-                                                  .individual![index].individual!
+                                              Text(sellercontroller.serviceSellerIndividual[index].individual!
                                                   .description!),
 
                                             ],)
@@ -214,10 +211,10 @@ class SellerListPage extends StatelessWidget {
                                           children: [
                                             InkWell(
                                               onTap:(){
-controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.individual![index].individual!.id);
-controller.isgetAllUserAvalibility=false.obs;
-controller.update();
-settingModalBottomSheet(context);
+                                                sellercontroller.gatAllUsersAvalabilityFunction(sellercontroller.serviceSellerIndividual[index].individual!.id);
+                                                sellercontroller.isgetAllUserAvalibility=false.obs;
+                                                sellercontroller.update();
+  settingModalBottomSheet(context);
 
 },
                                               child: Container(
@@ -231,7 +228,7 @@ settingModalBottomSheet(context);
                                                     border: Border.all(
                                                         color: MyColors.black)
                                                 ),
-                                                child: Text("Check Availabilty",
+                                                child: const Text("Check Availabilty",
                                                   style: TextStyle(
                                                       color: MyColors.green),),
                                               ),
@@ -239,7 +236,7 @@ settingModalBottomSheet(context);
                                             InkWell(
 
                                               onTap: () {
-                                                controller.sellerProfileFunction(controller.serviceSellerModal.data!.individual![index].individual!.id);
+                                                sellercontroller.sellerProfileFunction(sellercontroller.serviceSellerIndividual[index].individual!.id);
                                               },
                                               child: Container(
                                                 alignment: Alignment.center,
@@ -252,7 +249,7 @@ settingModalBottomSheet(context);
                                                     border: Border.all(
                                                         color: MyColors.black)
                                                 ),
-                                                child: Text("View Profile",
+                                                child: const Text("View Profile",
                                                   style: TextStyle(
                                                       color: MyColors.white),),
                                               ),
@@ -266,14 +263,14 @@ settingModalBottomSheet(context);
                                 ),
                               );
                             },
-                          ))
-                          : Expanded(child: ListView.builder(
-                          itemCount: controller.serviceSellerModal.data!.company!.length,
+                          ): Text("No Result found") )
+                          : Expanded(child: sellercontroller.serviceSellerCompany.isNotEmpty ?  ListView.builder(
+                          itemCount: sellercontroller.serviceSellerCompany.length,
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           itemBuilder: (BuildContext context,int index)
                       {
-                        Get.log(controller.serviceSellerModal.data!.company!.length
+                        Get.log(sellercontroller.serviceSellerModal.data!.company!.length
                             .toString());
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
@@ -288,9 +285,8 @@ settingModalBottomSheet(context);
                                     width: 70,
                                     child: FadeInImage.assetNetwork(
                                       placeholder: 'image/img.png',
-                                      image: "${imagesBaseUrl}${controller
-                                          .serviceSellerModal.data!
-                                          .company![index].company!
+                                      image: "${imagesBaseUrl}${sellercontroller
+                                          .serviceSellerCompany[index].company!
                                           .profileImage}",
                                     ),
                                   ),
@@ -301,21 +297,17 @@ settingModalBottomSheet(context);
 
                                       Row(
                                         children: [
-                                          Text(controller.serviceSellerModal.data!
-                                              .company![index].company!.firstName!),
-                                          Text(controller.serviceSellerModal.data!
+                                          Text(sellercontroller.serviceSellerCompany[index].company!.firstName!),
+                                          Text(sellercontroller.serviceSellerModal.data!
                                               .company![index].company!.lastName!),
                                         ],
                                       ),
                                       SizedBox(height: Dimens.size14,),
 
-                                      Text(controller.serviceSellerModal.data!
-                                          .company![index].company!
+                                      Text(sellercontroller.serviceSellerCompany[index].company!
                                           .businessAddress!),
-                                      Text(controller.serviceSellerModal.data!
-                                          .company![index].company!.phone!),
-                                      Text(controller.serviceSellerModal.data!
-                                          .company![index].company!.email!),
+                                      Text(sellercontroller.serviceSellerCompany[index].company!.phone!),
+                                      Text(sellercontroller.serviceSellerCompany[index].company!.email!),
 
                                     ],)
                                 ],),
@@ -331,9 +323,9 @@ settingModalBottomSheet(context);
                                       GestureDetector(
 
                                         onTap:(){
-                                          controller.gatAllUsersAvalabilityFunction(controller.serviceSellerModal.data!.company![index].company!.id);
-                                         controller.isgetAllUserAvalibility=false.obs;
-                                         controller.update();
+                                          sellercontroller.gatAllUsersAvalabilityFunction(sellercontroller.serviceSellerCompany[index].company!.id);
+                                          sellercontroller.isgetAllUserAvalibility=false.obs;
+                                          sellercontroller.update();
                                           settingModalBottomSheet(context);
 
 
@@ -348,14 +340,14 @@ settingModalBottomSheet(context);
                                               border: Border.all(
                                                   color: MyColors.black)
                                           ),
-                                          child: Text("Check Availabilty",
+                                          child: const Text("Check Availabilty",
                                             style: TextStyle(color: MyColors.green),),
                                         ),
                                       ),
                                       GestureDetector(
 
                                         onTap: (){
-                                          controller.sellerProfileFunction(controller.serviceSellerModal.data!.company![index].company!.id);
+                                          sellercontroller.sellerProfileFunction(sellercontroller.serviceSellerCompany[index].company!.id);
                                          // Get.to(()=>ProfileServicess());
                                         },
                                         child: Container(
@@ -368,7 +360,7 @@ settingModalBottomSheet(context);
                                               border: Border.all(
                                                   color: MyColors.black)
                                           ),
-                                          child: Text("View Profile",
+                                          child: const Text("View Profile",
                                             style: TextStyle(color: MyColors.white),),
                                         ),
                                       ),
@@ -382,7 +374,7 @@ settingModalBottomSheet(context);
                           ),
                         );
                       },
-                      )
+                      ): Center(child: Text("No Result Found"))
         )
 
 
@@ -406,16 +398,19 @@ void settingModalBottomSheet(context){
         return
           GetBuilder<SellerListController>(
             builder: (contextController) {
-              return ClipRRect(
+              return
+                 ClipRRect(
               borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
-              child: Container(
+              child: controller.isgetAllUserAvalibility.value ? Container(
                 height: 550,
                 color: Colors.white,
                 child:  contextController.getAllUserAvalibility.data!.length==0 ?Center(child: Container(
                     child: Text("No availibility time!")
                 ),): Padding(
                   padding: const EdgeInsets.only(left: 10.0,right: 10,top: 10),
-                  child: Column(children: [
+                  child:
+                  Column(
+                    children: [
 
                     Text("Approximate Availablity"),
 SizedBox(height: 8,),
@@ -426,7 +421,8 @@ SizedBox(height: 8,),
                     Expanded(
                      // height: 400,
                       child: Obx(
-                          ()=>  controller.isgetAllUserAvalibility.value ? ListView.builder(
+                          ()=>  controller.isgetAllUserAvalibility.value ?
+                          ListView.builder(
 
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
@@ -436,7 +432,7 @@ SizedBox(height: 8,),
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 15.0),
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                                  padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 10),
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
@@ -445,7 +441,7 @@ SizedBox(height: 8,),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                    Text(controller.getAllUserAvalibility.data![index].day.toString()),
+                                    Container(child: Text(controller.getAllUserAvalibility.data![index].day.toString())),
 SizedBox(width: 70,),
                                   Column(children: [
                                     Container(
@@ -514,7 +510,7 @@ SizedBox(width: 5,),
                     )
                   ],),
                 ),
-              ),
+              ):Center(child: CircularProgressIndicator(),),
         );
             }
           );

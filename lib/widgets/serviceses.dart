@@ -22,8 +22,8 @@ class Serviceses extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20.0 ,top: 10,bottom: 10),
               child: Row(children: [
                 Container(
-                    width: 100,
-                    height: 100,
+                    width: 70,
+                    height: 70,
                     child: FadeInImage.assetNetwork(placeholder: "",
                         image: "${imagesBaseUrl}${controller.sellerProfileModal
                             .data!.services![index].image}")),

@@ -8,7 +8,7 @@ import 'package:flutterapis/models/get_all_user_avalability/get_all_user_avalibi
 import 'package:flutterapis/models/my_appointments/my_appointments_modal.dart';
 import 'package:flutterapis/models/products/products_modal.dart' as product;
 import 'package:flutterapis/models/sellerProfileModal/seller_profile_modal.dart';
-import 'package:flutterapis/models/service_seller_modal/service_seller_modal.dart';
+import 'package:flutterapis/models/service_seller_modal/service_seller_modal.dart' as serviceSeller;
 import 'package:flutterapis/ui/pricing/pricing.dart';
 import 'package:flutterapis/widgets/progressBar.dart';
 import 'package:get/get.dart';
@@ -27,9 +27,10 @@ import '../../widgets/toasts.dart';
 class SellerListController extends GetxController {
 
   final fackStoreApi=SellerListApi();
-  RxBool isgetAllUserAvalibility=false.obs;
+  RxBool isgetAllUserAvalibility=true.obs;
 
-  RxBool isIndividual=false.obs;
+  int isIndividuals=1;
+RxBool isIndividual=false.obs;
 RxBool isUpComing=true.obs;
 int isDistance=1;
 int isMorning=1;
@@ -39,12 +40,16 @@ String dateformet="";
 //int selectedDate=0;
   DateTime dateTime = DateTime.now();
 
+
+  final searchController=TextEditingController();
+
 /// isloading
   RxBool isLoaded=false.obs;
   RxBool isSellersLoaded=false.obs;
   RxBool isSellerProfileLoading=false.obs;
   RxBool isFilterLoading=false.obs;
   RxBool isSellerFilterLoading=false.obs;
+  RxBool isBottomsellerLoding=true.obs;
   ///
   ///
   product.Products products=product.Products();
@@ -53,20 +58,33 @@ String dateformet="";
 MyAppointmentModal myAppointmentModal=MyAppointmentModal();
   GetPlanModal getPlanModal=GetPlanModal();
   SellerProfileModal sellerProfileModal=SellerProfileModal();
-  ServiceSellerModal serviceSellerModal=ServiceSellerModal();
+  serviceSeller.ServiceSellerModal serviceSellerModal=serviceSeller.ServiceSellerModal();
 GetAllUserAvalibility getAllUserAvalibility=GetAllUserAvalibility();
 
   final emailController=TextEditingController();
   final passwordController=TextEditingController();
 
 
+  ///
+
+  RxList<product.Datum> fondServicesListValue=<product.Datum>[].obs;
+  RxList<product.Datum> productList=<product.Datum>[].obs;
+  ///
+  RxList <serviceSeller.Individual> serviceSellerIndividual=<serviceSeller.Individual>[].obs;
+  RxList <serviceSeller.Individual> foundServicesIndividual=<serviceSeller.Individual>[].obs;
+
+  RxList<serviceSeller.CompanyElement> serviceSellerCompany=<serviceSeller.CompanyElement>[].obs;
+  RxList<serviceSeller.CompanyElement> foundServiceSellerCompany=<serviceSeller.CompanyElement>[].obs;
   /// log in
 
 
-  loginFunction(String email, String password)async{
+  loginFunction( String email, String password)async{
+  //  Get.dialog(ProgressBar(),barrierDismissible: false);
+
     await fackStoreApi.logInApi(email: email, password: password).then((value) {
 
       if(value.status=="1"){
+      //  Get.back();
         GetStorage().write("logged_user", value);
      SingleToneValue.instance.assesToken=value.data!.accessToken;
 
@@ -74,6 +92,7 @@ GetAllUserAvalibility getAllUserAvalibility=GetAllUserAvalibility();
 
         Get.to(()=> Home());
         fackStoreData();
+        update();
       }else{
         CustomToast.failToast(msg: "${value.errors}");
       }
@@ -89,30 +108,52 @@ GetAllUserAvalibility getAllUserAvalibility=GetAllUserAvalibility();
   }
 
   ///
-  List<product.Datum> productList=<product.Datum>[].obs;
+
 
   ///
   fackStoreData()async{
+    Get.dialog(ProgressBar(),barrierDismissible: false);
+
     Get.log("hello");
     await fackStoreApi.fakeProducts().then((value) {
      // Get.log("${value.toList()}");
 
       Get.log("hello2");
         if(value.status==true){
+          Get.back();
           CustomToast.successToast(msg: "success");
+
           products=value;
+          Get.log("product list products ${products.data}");
+
+          productList.value=products.data!;
+         fondServicesListValue.value=productList;
 
           isLoaded.value=!isLoaded.value;
-          productList=products.data!;
+          Get.log("product list ${productList[0].name}");
+          Get.log("product list products fondServicesListValue ${fondServicesListValue}");
+
           update();
         }else{
 
           CustomToast.failToast(msg: "fail");
-
         }
-
       } );
+  }
 
+  void filterSearch(String names){
+    List<product.Datum> results=[];
+
+    if(names.isEmpty){
+      results=productList.value;
+      update();
+      Get.log("result products list ${results.length}");
+    }else{
+      results=productList.where((element) => element.name!.toLowerCase().contains(names.toLowerCase())).toList();
+      update();
+    }
+    fondServicesListValue.value=results;
+    update();
   }
 
   // RxList<selller.Data> foundIndividualList=<Data>[].obs;
@@ -122,10 +163,13 @@ GetAllUserAvalibility getAllUserAvalibility=GetAllUserAvalibility();
     await fackStoreApi.serviceSeller(serviceID).then((value) {
 
       if(value.status=="1"){
-    //    Get.back();
-      //  change(value,status: RxStatus.success());
+
         CustomToast.successToast(msg: "${value.message}");
 serviceSellerModal=value;
+        foundServicesIndividual.value=serviceSellerModal.data!.individual!;
+        serviceSellerIndividual.value=foundServicesIndividual;
+        foundServiceSellerCompany.value=serviceSellerModal.data!.company!;
+serviceSellerCompany.value=foundServiceSellerCompany;
 Get.log("servicesmodal 123 ${serviceSellerModal}");
        // isSellersLoaded.value=!isSellersLoaded.value;
 update();
@@ -136,6 +180,38 @@ Get.to(()=>SellerListPage());
     });
 
   }
+/// search function
+
+  searchServicesSellerFunction(String names,bool individual){
+    List <serviceSeller.Individual> individulResult=<serviceSeller.Individual>[].obs;
+    List <serviceSeller.CompanyElement> companyResult=<serviceSeller.CompanyElement>[].obs;
+
+    if(individual==true){
+
+
+      if(names.isEmpty){
+         individulResult= foundServicesIndividual.value;
+         update();
+      }else{
+        individulResult=foundServicesIndividual.where((individualValue) => individualValue.individual!.firstName!.toLowerCase().toString().contains(names.toLowerCase())).toList();
+     update();
+      }
+      serviceSellerIndividual.value=individulResult;
+update();
+    }else{
+
+if(names.isEmpty){
+   companyResult=foundServiceSellerCompany.value;
+   update();
+}else{
+  companyResult=foundServiceSellerCompany.where((element) =>element.company!.firstName!.toLowerCase().toString().contains(names.toLowerCase()) ).toList();
+update();
+}
+serviceSellerCompany.value=companyResult;
+update();
+    }
+  }
+
 
 /// seller profilr modal
 
@@ -270,6 +346,8 @@ sellerProfileFunction(var sellerId)async{
   void onInit() {
     // TODO: implement onInit
     // fackStoreData();
+
+   // fondServicesListValue=productList;
     super.onInit();
 
 
@@ -283,17 +361,7 @@ sellerProfileFunction(var sellerId)async{
   }
 
 
-   filterSearch(String? names){
-    List<product.Datum> results=[];
 
-    if(names!.isEmpty){
-      results=productList;
-      update();
-    }else{
-      results=productList.where((element) => element.name.toString().toLowerCase().contains(names.toLowerCase())).toList();
-    }
-    productList=results;
-  }
 }
 
 ///

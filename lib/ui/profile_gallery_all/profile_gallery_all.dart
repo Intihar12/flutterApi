@@ -14,6 +14,7 @@ class ProfileGalleryAll extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: MyColors.viewcolor,
         title: Text("Gallery"),
       ),
       body: SingleChildScrollView(
@@ -22,7 +23,7 @@ class ProfileGalleryAll extends StatelessWidget {
           child: Column(
             children: [
               GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     //  maxCrossAxisExtent:160,
 
                     crossAxisCount: 3,
@@ -32,6 +33,7 @@ class ProfileGalleryAll extends StatelessWidget {
                     //   mainAxisExtent: 150
                   ),
                   shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
                   itemCount:
                       controller.sellerProfileModal.data!.gallery!.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -42,7 +44,7 @@ class ProfileGalleryAll extends StatelessWidget {
                               child: Container(
                         height: 450,
                           width: 300,
-                          color: Colors.red,
+                        //  color: Colors.red,
                                 child: Stack(
                                   children: [
                                     Container(
@@ -66,7 +68,7 @@ class ProfileGalleryAll extends StatelessWidget {
 
                                           height: 30,
                                           width: 30,
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                             shape: BoxShape.circle,
                                             color: MyColors.white
                                           ),

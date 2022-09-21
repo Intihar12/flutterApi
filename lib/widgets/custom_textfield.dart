@@ -123,7 +123,7 @@ class CustomTextField3 extends StatelessWidget {
               color: hintColor ?? MyColors.hintText,
               fontWeight: FontWeight.normal,
               fontSize: 12),
-          contentPadding:  EdgeInsets.only(left: 15,bottom: Dimens.size18),
+          contentPadding:  EdgeInsets.only(left: 15,bottom: Dimens.size8,top: 12),
           prefixIcon: Padding(
             padding:  EdgeInsets.all( Dimens.size8),
             child: icon,

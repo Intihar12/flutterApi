@@ -26,7 +26,11 @@ class Filters extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: Row(
               children: [
-                Icon(Icons.clear),
+                GestureDetector(
+                    onTap: (){
+                      Get.back();
+                    },
+                    child: Icon(Icons.clear)),
                 SizedBox(
                   width: 15,
                 ),
